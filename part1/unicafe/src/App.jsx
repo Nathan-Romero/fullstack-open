@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-const Display = ({ category, value }) => (
-  <div>{category} {value}</div>
+const StatisticLine = ({ text, value }) => (
+  <div>{text} {value}</div>
 )
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -15,12 +15,12 @@ const Statistics = ({ good, neutral, bad }) => {
 
   return (
     <>
-      <Display category="good" value={good} />
-      <Display category="neutral" value={neutral} />
-      <Display category="bad" value={bad} />
-      <Display category="all" value={all} />
-      <Display category="average" value={average} />
-      <Display category="positive" value={positive} />
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="all" value={all} />
+      <StatisticLine text="average" value={average} />
+      <StatisticLine text="positive" value={positive} />
     </>
   )
 }
