@@ -1,10 +1,30 @@
 import { useState } from 'react'
 
-const Statistics = (props) => {
-  <div>
-    {props.category} {props.value}
-  </div>
+const Display = ({ category, value }) => (
+  <div>{category} {value}</div>
+)
+
+const Statistics = ({ good, neutral, bad }) => {
+  let all = good + neutral + bad
+  let average = (good - bad) / all
+  let positive = (good / all) * 100 + ' %'
+  
+  if (all === 0) {
+    return <div>No feedback given</div>
+  }
+
+  return (
+    <>
+      <Display category="good" value={good} />
+      <Display category="neutral" value={neutral} />
+      <Display category="bad" value={bad} />
+      <Display category="all" value={all} />
+      <Display category="average" value={average} />
+      <Display category="positive" value={positive} />
+    </>
+  )
 }
+
 const Button = (props) => (
   <button onClick={props.onClick}>
     {props.text}
@@ -24,12 +44,7 @@ const App = () => {
       <Button onClick={() => setNeutral(neutral + 1)} text="neutral" />
       <Button onClick={() => setBad(bad + 1)} text="bad" />
       <h1>statistics</h1>
-      <Statistics category="good" value={good} />
-      <Statistics category="neutral" value={neutral} />
-      <Statistics category="bad" value={bad} />
-      <Statistics category="all" value={good + neutral + bad} />
-      <Statistics category="average" value={good + neutral + bad === 0 ? 0 : ((good - bad) / (good + neutral + bad)).toPrecision(14)} />
-      <Statistics category="positive" value={good + neutral + bad === 0 ? 0 : (((good / (good + neutral + bad)) * 100).toPrecision(14) + ' %')} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
