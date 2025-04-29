@@ -1,9 +1,7 @@
 import { useState } from 'react'
 
-const Display = props => {
-  return (
-  <div>{props.category} {props.value}</div>
-)}
+const Display = props => <div>{props.category} {props.value}</div>
+
 const Button = (props) => (
   <button onClick={props.onClick}>
     {props.text}
@@ -26,6 +24,9 @@ const App = () => {
       <Display category="good" value={good} />
       <Display category="neutral" value={neutral} />
       <Display category="bad" value={bad} />
+      <Display category="all" value={good + neutral + bad} />
+      <Display category="average" value={good + neutral + bad === 0 ? 0 : ((good - bad) / (good + neutral + bad)).toPrecision(14)} />
+      <Display category="positive" value={good + neutral + bad === 0 ? 0 : (((good / (good + neutral + bad)) * 100).toPrecision(14) + ' %')} />
     </div>
   )
 }
