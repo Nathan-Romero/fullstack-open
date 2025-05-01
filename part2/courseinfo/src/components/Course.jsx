@@ -1,6 +1,6 @@
-import Header from './Header.jsx'
-import Content from './Content.jsx'
-import Total from './Total.jsx'
+import Header from './Header'
+import Content from './Content'
+import Total from './Total'
 
 const Course = ({ course }) => {
   const total = course.parts.reduce((acc, part) => {
