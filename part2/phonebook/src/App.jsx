@@ -25,9 +25,12 @@ const App = () => {
       number: newNumber,
     }
 
-    const nameExists = persons.some(person => person.name === newName)
-    if (nameExists) {
-      alert(`${newName} is already added to phonebook`)
+    const existingPerson = persons.find(person => person.name === newName)
+    
+    if (existingPerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        updatePerson(existingPerson.id, {...existingPerson, number: newNumber})
+      }
       return
     }
 
@@ -37,6 +40,24 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+      })
+  }
+
+  const updatePerson = (id, personObject) => {
+    personService
+      .update(id, personObject)
+      .then(returnedPerson => {
+        setPersons(persons.map(person => 
+          person.id === id ? returnedPerson : person
+        ))
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch(error => {
+        alert(
+          `The person '${personObject.name}' was already deleted from the server`
+        )
+        setPersons(persons.filter(p => p.id !== id))
       })
   }
 
