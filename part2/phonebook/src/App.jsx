@@ -3,12 +3,15 @@ import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [message, setMessage] = useState(null)
+  const [errorFlag, setErrorFlag] = useState(false)
 
   useEffect(() => {
     personService
@@ -40,6 +43,11 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setErrorFlag(false)
+        setMessage(`Added ${newName}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
   }
 
@@ -52,11 +60,22 @@ const App = () => {
         ))
         setNewName('')
         setNewNumber('')
-      })
-      .catch(error => {
-        alert(
-          `The person '${personObject.name}' was already deleted from the server`
+        setErrorFlag(false)
+        setMessage(
+          `Number has been updated for ${personObject.name}`
         )
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
+      .catch(() => {
+        setErrorFlag(true)
+        setMessage(
+          `Information of ${personObject.name} has already been removed`
+        )
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
         setPersons(persons.filter(p => p.id !== id))
       })
   }
@@ -67,11 +86,22 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
-        })
-        .catch(error => {
-          alert(
-            `the person '${name}' was already deleted from the server`
+          setErrorFlag(false)
+          setMessage(
+            `${name} has been deleted`
           )
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
+        .catch(() => {
+          setErrorFlag(true)
+          setMessage(
+            `Information of ${personObject.name} has already been removed`
+          )
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
           setPersons(persons.filter(p => p.id !== id))
         })
     }
@@ -96,6 +126,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} errorFlag={errorFlag} />
       <Filter searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
       <h3>Add a new</h3>
       <PersonForm
