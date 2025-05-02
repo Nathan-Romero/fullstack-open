@@ -1,6 +1,6 @@
 let Filter = ({ searchTerm, handleSearchChange }) => (
   <>
-    filter shown with <input
+    find countries <input
           value={searchTerm}
           onChange={handleSearchChange}
         />
