@@ -1,27 +1,14 @@
 import { useState, useEffect } from 'react'
-import noteService from './services/notes'
+import Footer from './components/Footer'
 import Note from './components/Note'
 import Notification from './components/Notification'
-
-const Footer = () => {
-  const footerStyle = {
-    color: 'green',
-    fontStyle: 'italic',
-    fontSize: 16
-  }
-  return (
-    <div style={footerStyle}>
-      <br />
-      <em>Note app, Department of Computer Science, University of Helsinki 2025</em>
-    </div>
-  )
-}
+import noteService from './services/notes'
 
 const App = () => {
   const [notes, setNotes] = useState(null)
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('some error happened...')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     noteService
@@ -34,6 +21,21 @@ const App = () => {
   // do not render anything if notes is still null
   if (!notes) {
     return null
+  }
+
+  const addNote = event => {
+    event.preventDefault()
+    const noteObject = {
+      content: newNote,
+      important: Math.random() < 0.5,
+    }
+
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
+        setNewNote('')
+      })
   }
 
   const toggleImportanceOf = id => {
@@ -56,21 +58,6 @@ const App = () => {
       })
   }
 
-  const addNote = event => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    }
-
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
-        setNewNote('')
-      })
-  }
-
   const handleNoteChange = (event) => {
     console.log(event.target.value)
     setNewNote(event.target.value)
@@ -90,7 +77,7 @@ const App = () => {
         </button>
       </div>
       <ul>
-        {notesToShow.map(note =>
+        {notesToShow.map((note) =>
           <Note
             key={note.id}
             note={note}

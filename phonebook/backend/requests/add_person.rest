@@ -1,0 +1,16 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Edgar Djikstra",
+  "number": "23-234256"
+}
+
+###
+POST https://phonebook-rheo.onrender.com/api/persons
+Content-Type: application/json
+
+{
+  "name": "Edgar Djikstra",
+  "number": "23-234256"
+}
