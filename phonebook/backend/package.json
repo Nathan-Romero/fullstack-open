@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "license": "MIT",
   "author": "Nathan Romero",
@@ -14,6 +14,7 @@
     "deploy:full": "npm run build:ui && cd ../ && git add . && git commit -m uibuild && git push"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "morgan": "^1.10.0"
   }
 }
