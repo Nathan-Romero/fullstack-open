@@ -49,6 +49,14 @@ const App = () => {
           setMessage(null)
         }, 5000)
       })
+      .catch(error => {
+        console.log(error.response.data.error)
+        setErrorFlag(true)
+        setMessage(error.response.data.error)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
   }
 
   const updatePerson = (id, personObject) => {
@@ -68,15 +76,19 @@ const App = () => {
           setMessage(null)
         }, 5000)
       })
-      .catch(() => {
-        setErrorFlag(true)
-        setMessage(
-          `Information of ${personObject.name} has already been removed`
-        )
+      .catch(error => {
+        if (error.response && error.response.data && error.response.data.error) {
+          setErrorFlag(true)
+          setMessage(error.response.data.error)
+        } else {
+          setErrorFlag(true)
+          setMessage(`Information of ${personObject.name} has already been removed`)
+          setPersons(persons.filter(p => p.id !== id))
+        }
+        
         setTimeout(() => {
           setMessage(null)
         }, 5000)
-        setPersons(persons.filter(p => p.id !== id))
       })
   }
 
@@ -97,7 +109,7 @@ const App = () => {
         .catch(() => {
           setErrorFlag(true)
           setMessage(
-            `Information of ${personObject.name} has already been removed`
+            `Information of ${name} has already been removed`
           )
           setTimeout(() => {
             setMessage(null)
