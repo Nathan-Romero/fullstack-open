@@ -9,6 +9,12 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
+  if (!body.title || !body.url) {
+    return response.status(400).json({
+      error: 'title or url missing'
+    })
+  }
+
   const blog = new Blog({
     title: body.title,
     author: body.author,
@@ -16,8 +22,15 @@ blogsRouter.post('/', async (request, response) => {
     likes: body.likes || 0
   })
 
-  const savedBlog = await blog.save()
-  response.status(201).json(savedBlog)
+  try {
+    const savedBlog = await blog.save()
+    response.status(201).json(savedBlog)
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      return response.status(400).json({ error: error.message })
+    }
+    response.status(500).json({ error: 'Something went wrong' })
+  }
 })
 
 module.exports = blogsRouter
