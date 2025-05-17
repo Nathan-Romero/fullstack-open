@@ -142,6 +142,53 @@ test('returns 400 when trying to delete with malformatted id', async () => {
     .expect(400)
 })
 
+test('a blog\'s likes can be updated', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToUpdate = blogsAtStart[0]
+
+  const updatedData = { ...blogToUpdate, likes: blogToUpdate.likes + 10 }
+
+  const response = await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(updatedData)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  assert.strictEqual(response.body.likes, blogToUpdate.likes + 10)
+
+  const blogInDb = await Blog.findById(blogToUpdate.id)
+  assert.strictEqual(blogInDb.likes, blogToUpdate.likes + 10)
+})
+
+test('returns 404 if blog to update does not exist', async () => {
+  const nonExistingId = await helper.nonExistingId()
+  const updatedData = {
+    title: 'Nonexistent',
+    author: 'Nobody',
+    url: 'http://none.com',
+    likes: 1
+  }
+
+  await api
+    .put(`/api/blogs/${nonExistingId}`)
+    .send(updatedData)
+    .expect(404)
+})
+
+test('returns 400 for malformatted id', async () => {
+  const updatedData = {
+    title: 'Bad ID',
+    author: 'Nobody',
+    url: 'http://none.com',
+    likes: 1
+  }
+
+  await api
+    .put('/api/blogs/bad-id')
+    .send(updatedData)
+    .expect(400)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
