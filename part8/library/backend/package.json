@@ -1,0 +1,20 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev":"nodemon --watch src --exec node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "dependencies": {
+    "@apollo/server": "^4.12.1",
+    "graphql": "^16.11.0",
+    "nodemon": "^3.1.10",
+    "uuid": "^11.1.0"
+  }
+}
